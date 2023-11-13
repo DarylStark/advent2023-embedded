@@ -2,27 +2,37 @@
 #include <WS2812B_Matrix.h>
 #include <SubwayFont.h>
 
-#include "connect_wifi.h"
-
 WS2812B_Matrix leds(5, 32, 8);
 MatrixFont font;
 
+#include "advent2023.h"
+
+Advent2023 advent2023;
+
 void setup()
 {
-    Serial.begin(115200);
+    // Serial.begin(115200);
+
+    // // WiFi Manager
+    // Serial.println("Connecting to WiFi");
+    // connect_wifi("Advent 2023");
+
+    // // Connected to WiFi
     // leds.setup();
     // leds.clear();
-
     // font = get_subway_font();
     // leds.set_font("subway", font);
 
-    connect_wifi("Advent 2023");
+    // Serial.println("Done with setup");
+
+    advent2023.setup();
 }
 
 void loop()
 {
+    advent2023.loop();
     // leds.clear();
-    // uint32_t size = leds.display_string(3, 0, "22:39", "subway", {255, 255, 255, 0.01});
+    // uint32_t size = leds.display_string(3, 0, "20:09", "subway", {255, 255, 255, 0.01});
     // leds.show();
     // delay(100);
 }
