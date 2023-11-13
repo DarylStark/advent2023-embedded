@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include <memory>
 #include <WiFiManager.h>
+#include <WebServer.h>
+#include <functional>
 
 class Advent2023;
 
@@ -35,11 +37,16 @@ public:
 
 class Advent2023StateApp : public Advent2023State
 {
+private:
+    WebServer __web_server;
+
 public:
     Advent2023StateApp(Advent2023 &context);
 
     void setup();
     void loop();
+
+    void server_root_page();
 };
 
 /******************************************************************************/

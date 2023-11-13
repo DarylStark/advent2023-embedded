@@ -24,7 +24,10 @@ void Advent2023StateConnectingWifi::setup()
     bool res = wm.autoConnect("Advent 2023");
 
     if (res)
+    {
         _context.transition(std::make_shared<Advent2023StateApp>(_context));
+        _context.setup();
+    }
 }
 
 void Advent2023StateConnectingWifi::loop()
@@ -35,19 +38,26 @@ void Advent2023StateConnectingWifi::loop()
 /******************************************************************************/
 
 Advent2023StateApp::Advent2023StateApp(Advent2023 &context)
-    : Advent2023State(context)
+    : Advent2023State(context), __web_server(80)
 {
 }
 
 void Advent2023StateApp::setup()
 {
-    Serial.println("You shouldn't see this");
+    Serial.println("Setting up the app");
+    __web_server.on("/", std::bind(&Advent2023StateApp::server_root_page, this));
+    __web_server.begin();
 }
 
 void Advent2023StateApp::loop()
 {
-    Serial.println("Looping the app");
-    delay(2000);
+    __web_server.handleClient();
+    delay(10);
+}
+
+void Advent2023StateApp::server_root_page()
+{
+    __web_server.send(200, "text/html", "<p>Frontpage</p>");
 }
 
 /******************************************************************************/
