@@ -2,17 +2,24 @@
 #define __ADVENT2023_H__
 
 #include <memory>
+#include <sstream>
+#include <iomanip>
 #include <Arduino.h>
 #include <WiFiManager.h>
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
 #include <WS2812B_Matrix.h>
 #include <SubwayFont.h>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
+
 #include "app.h"
 #include "static_web_server.h"
 #include "backend_web_server.h"
 
 extern MatrixFont matrix_font;
+extern WiFiUDP udp_client;
+extern NTPClient ntp_client;
 
 class Advent2023 : public App
 {
@@ -26,6 +33,7 @@ private:
 
     void __blink_text(int x, const std::string text, Color color_a, Color color_b, uint32_t repeat = 29, uint32_t timeout = 75);
     void __scroll_text(const std::string text, Color color);
+    void __display_clock();
 
 public:
     Advent2023();

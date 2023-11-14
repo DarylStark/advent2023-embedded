@@ -1,6 +1,8 @@
 #include "advent2023.h"
 
 MatrixFont matrix_font = get_subway_font();
+WiFiUDP udp_client;
+NTPClient ntp_client(udp_client);
 
 Advent2023::Advent2023()
     : __web_server(80),
@@ -35,17 +37,33 @@ void Advent2023::setup()
         __led_matrix.clear();
         __led_matrix.set_font("subway", matrix_font);
         __led_matrix.show();
+
+        // Set up NTP
+        ntp_client.begin();
+        ntp_client.setTimeOffset(3600);
+        ntp_client.setUpdateInterval(3600000);
     }
+}
+
+void Advent2023::__display_clock()
+{
+    __led_matrix.clear();
+    ntp_client.update();
+    std::stringstream time;
+    time << std::setfill('0') << std::setw(2) << ntp_client.getHours() << ":";
+    time << std::setfill('0') << std::setw(2) << ntp_client.getMinutes();
+    display_text(3, time.str(), {255, 255, 0, 0.01});
 }
 
 void Advent2023::loop()
 {
     if (__clock_mode)
-        Serial.println("Clock mode :)");
-    else
-        Serial.println("Not clock mode :)");
+        __display_clock();
+    delay(250);
 
-    delay(1000);
+    // Reboot every 10 hours
+    if (millis() > 10 * 60 * 60 * 1000)
+        ESP.restart();
 }
 
 uint16_t Advent2023::display_text(int x, const std::string text, Color color)
