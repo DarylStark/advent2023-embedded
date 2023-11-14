@@ -1,20 +1,6 @@
 #include "advent2023.h"
 
-/******************************************************************************/
-
-Advent2023State::Advent2023State(Advent2023 &context)
-    : _context(context)
-{
-}
-
-/******************************************************************************/
-
-Advent2023StateConnectingWifi::Advent2023StateConnectingWifi(Advent2023 &context)
-    : Advent2023State(context)
-{
-}
-
-void Advent2023StateConnectingWifi::setup()
+void Advent2023::setup()
 {
     Serial.begin(115200);
     Serial.println("Connecting to WiFi");
@@ -25,61 +11,21 @@ void Advent2023StateConnectingWifi::setup()
 
     if (res)
     {
-        _context.transition(std::make_shared<Advent2023StateApp>(_context));
-        _context.setup();
+        Serial.println("Setting up the app");
+        __web_server.on("/", std::bind(&Advent2023::__server_root_page, this));
+        __web_server.begin();
     }
 }
 
-void Advent2023StateConnectingWifi::loop()
-{
-    Serial.println("You shouldn't see this");
-}
-
-/******************************************************************************/
-
-Advent2023StateApp::Advent2023StateApp(Advent2023 &context)
-    : Advent2023State(context), __web_server(80)
-{
-}
-
-void Advent2023StateApp::setup()
-{
-    Serial.println("Setting up the app");
-    __web_server.on("/", std::bind(&Advent2023StateApp::server_root_page, this));
-    __web_server.begin();
-}
-
-void Advent2023StateApp::loop()
+void Advent2023::loop()
 {
     __web_server.handleClient();
     delay(10);
 }
 
-void Advent2023StateApp::server_root_page()
+void Advent2023::__server_root_page()
 {
     __web_server.send(200, "text/html", "<p>Frontpage</p>");
-}
-
-/******************************************************************************/
-
-Advent2023::Advent2023()
-    : __state(std::make_shared<Advent2023StateConnectingWifi>(*this))
-{
-}
-
-void Advent2023::setup()
-{
-    __state->setup();
-}
-
-void Advent2023::loop()
-{
-    __state->loop();
-}
-
-void Advent2023::transition(std::shared_ptr<Advent2023State> state)
-{
-    __state = state;
 }
 
 /******************************************************************************/
