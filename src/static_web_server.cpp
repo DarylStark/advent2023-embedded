@@ -20,7 +20,7 @@ void StaticWebServer::setup()
             this,
             std::placeholders::_1));
     _web_server.on(
-        "/static/js/main.29523ef9.js",
+        "/static/js/main.js",
         std::bind(
             &StaticWebServer::__js_file,
             this,
@@ -43,5 +43,5 @@ void StaticWebServer::__css_file(AsyncWebServerRequest *request)
 
 void StaticWebServer::__js_file(AsyncWebServerRequest *request)
 {
-    request->send(LittleFS, "/static/js/main.29523ef9.js", "text/javascript");
+    request->send(LittleFS, "/static/js/main.js", "text/javascript");
 }
