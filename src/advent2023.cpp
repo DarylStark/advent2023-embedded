@@ -8,7 +8,8 @@ Advent2023::Advent2023()
           std::make_shared<StaticWebServer>(__web_server, *this)),
       __backend_web_server(
           std::make_shared<BackendWebServer>(__web_server, *this)),
-      __led_matrix(5, 32, 8)
+      __led_matrix(5, 32, 8),
+      __clock_mode(true)
 {
 }
 
@@ -39,14 +40,21 @@ void Advent2023::setup()
 
 void Advent2023::loop()
 {
+    if (__clock_mode)
+        Serial.println("Clock mode :)");
+    else
+        Serial.println("Not clock mode :)");
+
+    delay(1000);
 }
 
-void Advent2023::display_text(int x, const std::string text, Color color)
+uint16_t Advent2023::display_text(int x, const std::string text, Color color)
 {
-    __led_matrix.display_string(
+    uint16_t length = __led_matrix.display_string(
         x, 0, text, "subway",
         color);
     __led_matrix.show();
+    return length;
 }
 
 void Advent2023::__scroll_text(const std::string text, Color color)
@@ -56,10 +64,7 @@ void Advent2023::__scroll_text(const std::string text, Color color)
     while (true)
     {
         __led_matrix.clear();
-        size = __led_matrix.display_string(
-            x, 0, text, "subway",
-            color);
-        __led_matrix.show();
+        size = display_text(x, text, color);
         x--;
         if (x == -size)
             break;
@@ -83,14 +88,26 @@ void Advent2023::__blink_text(int x, const std::string text, Color color_a, Colo
 
 void Advent2023::wrong()
 {
+    __clock_mode = false;
     __blink_text(4, "FOUT", {0, 0, 0, 0.}, {255, 0, 0, 0.1});
+    delay(2000);
+    __led_matrix.clear();
+    __led_matrix.show();
+    __clock_mode = true;
 }
 
 void Advent2023::correct(std::string text)
 {
+    __clock_mode = false;
     __blink_text(4, "GOED", {0, 0, 0, 0.}, {0, 255, 0, 0.1});
     delay(2000);
     __led_matrix.clear();
     for (int i = 0; i < 3; ++i)
         __scroll_text(text, {0, 255, 0, 0.1});
+    __clock_mode = true;
+}
+
+bool Advent2023::ready() const
+{
+    return __clock_mode;
 }

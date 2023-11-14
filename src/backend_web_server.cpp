@@ -7,6 +7,12 @@ BackendWebServer::BackendWebServer(AsyncWebServer &web_server, App &app)
 
 void BackendWebServer::__wrong(AsyncWebServerRequest *request)
 {
+    if (!_app.ready())
+    {
+        request->send(422, "application/json", "{ \"ok\": false }");
+        return;
+    }
+
     auto t = std::thread([this]()
                          { _app.wrong(); });
     t.detach();
@@ -15,6 +21,12 @@ void BackendWebServer::__wrong(AsyncWebServerRequest *request)
 
 void BackendWebServer::__correct(AsyncWebServerRequest *request)
 {
+    if (!_app.ready())
+    {
+        request->send(422, "application/json", "{ \"ok\": false }");
+        return;
+    }
+
     int param_count = request->params();
     if (param_count != 1)
     {

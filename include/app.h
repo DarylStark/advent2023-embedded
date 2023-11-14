@@ -8,9 +8,10 @@ class App
 public:
     virtual void setup() = 0;
     virtual void loop() = 0;
-    virtual void display_text(int x, const std::string text, Color color);
+    virtual uint16_t display_text(int x, const std::string text, Color color);
     virtual void wrong();
     virtual void correct(std::string text);
+    virtual bool ready() const;
 };
 
 #endif
