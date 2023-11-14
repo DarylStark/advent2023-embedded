@@ -27,6 +27,7 @@ public:
     void show();
     void clear();
     void set_pixel(uint32_t pixel_index, Color color);
+    void fill(Color color);
 };
 
 #endif

@@ -1,10 +1,4 @@
 #include <Arduino.h>
-#include <WS2812B_Matrix.h>
-#include <SubwayFont.h>
-
-WS2812B_Matrix leds(5, 32, 8);
-MatrixFont font;
-
 #include "advent2023.h"
 
 Advent2023 advent2023;

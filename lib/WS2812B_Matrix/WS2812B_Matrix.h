@@ -21,6 +21,7 @@ public:
     void display_pixel_list(PixelList pixel_list, const Color &color);
     uint16_t display_character(const int32_t x, const int32_t y, const char character, const std::string &font, const Color &color);
     uint16_t display_string(const int32_t x, const int32_t y, const std::string &string, const std::string &font, const Color &color);
+    uint32_t get_width() const;
 };
 
 #endif

@@ -70,3 +70,8 @@ uint16_t WS2812B_Matrix::display_string(const int32_t x, const int32_t y, const 
 
     return total;
 }
+
+uint32_t WS2812B_Matrix::get_width() const
+{
+    return __width;
+}
