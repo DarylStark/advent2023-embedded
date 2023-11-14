@@ -25,6 +25,10 @@ void StaticWebServer::setup()
             &StaticWebServer::__js_file,
             this,
             std::placeholders::_1));
+    _web_server.onNotFound(std::bind(
+        &StaticWebServer::__server_root_page,
+        this,
+        std::placeholders::_1));
 }
 
 void StaticWebServer::__server_root_page(AsyncWebServerRequest *request)
