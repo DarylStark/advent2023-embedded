@@ -14,7 +14,7 @@ void StaticWebServer::setup()
             this,
             std::placeholders::_1));
     _web_server.on(
-        "/static/css/main.50ad4168.css",
+        "/static/css/main.622ab599.css",
         std::bind(
             &StaticWebServer::__css_file,
             this,
@@ -38,7 +38,7 @@ void StaticWebServer::__server_root_page(AsyncWebServerRequest *request)
 
 void StaticWebServer::__css_file(AsyncWebServerRequest *request)
 {
-    request->send(LittleFS, "/static/css/main.50ad4168.css", "text/css");
+    request->send(LittleFS, "/static/css/main.622ab599.css", "text/css");
 }
 
 void StaticWebServer::__js_file(AsyncWebServerRequest *request)
