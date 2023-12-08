@@ -52,7 +52,7 @@ void Advent2023::__display_clock()
     std::stringstream time;
     time << std::setfill('0') << std::setw(2) << ntp_client.getHours() << ":";
     time << std::setfill('0') << std::setw(2) << ntp_client.getMinutes();
-    display_text(3, time.str(), {255, 255, 0, 0.01});
+    display_text(3, time.str(), {255, 255, 255, 0.2});
 }
 
 void Advent2023::loop()
